@@ -16,9 +16,14 @@ public class ToDoDAO {
   private static List<ToDo> toDos = new ArrayList<>();
   private FlexibleComparator comparator = new FlexibleComparator();
 
-  public boolean create(String description) {
+  public ToDoDAO(){
+    create("download matlab", true);
+    create("delete matlab", false);
+  }
+
+  public boolean create(String description, boolean checked) {
     long id = counter.incrementAndGet();
-    ToDo todo = new ToDo(id, description);
+    ToDo todo = new ToDo(id, description, checked);
     toDos.add(todo);
     return true;
   }
@@ -29,9 +34,9 @@ public class ToDoDAO {
     return toDos;
   }
 
-  public boolean update(long id, String description) {
+  public boolean update(long id, String description, boolean checked) {
     Iterator<ToDo> iterator = toDos.iterator();
-    ToDo newTodo = new ToDo(id, description);
+    ToDo newTodo = new ToDo(id, description, checked);
     while (iterator.hasNext()) {
       if (iterator.next().getId() == id) {
         iterator.remove();
@@ -51,6 +56,17 @@ public class ToDoDAO {
       }
     }
     return false;
+  }
+
+  public int leftIteams() {
+    int count = toDos.size();
+    Iterator<ToDo> iterator = toDos.iterator();
+    while (iterator.hasNext()) {
+      if (iterator.next().isChecked()) {
+        count--;
+      }
+    }
+    return count;
   }
 }
 
