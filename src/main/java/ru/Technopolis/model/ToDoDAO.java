@@ -16,11 +16,6 @@ public class ToDoDAO {
   private static List<ToDo> toDos = new ArrayList<>();
   private FlexibleComparator comparator = new FlexibleComparator();
 
-  public ToDoDAO(){
-    create("download matlab", true);
-    create("delete matlab", false);
-  }
-
   public ToDo create(String description, boolean checked) {
     long id = counter.incrementAndGet();
     ToDo todo = new ToDo(id, description, checked);
