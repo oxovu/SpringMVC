@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Todo MVC</title>
-    <link rel="stylesheet" href="/styles/default.css" />
+    <link rel="stylesheet" href="/styles/default.css"/>
+    <script src="/script.js"></script>
 </head>
 <body>
 
@@ -13,7 +14,7 @@
 
     <div class="todos-board __has-content">
         <div class="todos-creator">
-            <button class="todos-creator_check-all" aria-label="Check all items as done"></button>
+            <button class="todos-creator_add" aria-label="Add todo" onclick="createToDo()"></button>
             <div class="todos-creator_text-input-w">
                 <input type="text" class="todos-creator_text-input" placeholder="What needs to be done?"
                        aria-label="Input next todo text"/>
@@ -24,52 +25,18 @@
                  th:classappend="${toDo.isChecked()} ? 'todo-item__selected'" th:id="${toDo.getId()}">
                 <div class="custom-checkbox todos-list_item_ready-marker">
                     <input type="checkbox" class="custom-checkbox_target" aria-label="Mark todo as ready"
-                           th:checked="${toDo.isChecked()}"/>
+                           th:checked="${toDo.isChecked()}" onclick="checkItem(this.parentElement.parentElement)"/>
                     <div class="custom-checkbox_visual">
                         <div class="custom-checkbox_visual_icon"></div>
                     </div>
                 </div>
-                <button class="todos-list_item_remove" aria-label="Delete todo"></button>
+                <button class="todos-list_item_remove" aria-label="Delete todo"
+                        onclick="deleteToDo(this.parentElement.id)"></button>
                 <div class="todos-list_item_text-w">
                     <text class="todos-list_item_text" th:utext="${toDo.getDescription()}">some todo</text>
                 </div>
             </div>
-            <!--<div class="todos-list_item">-->
-                <!--<div class="custom-checkbox todos-list_item_ready-marker">-->
-                    <!--<input type="checkbox" class="custom-checkbox_target" checked aria-label="Mark todo as ready"/>-->
-                    <!--<div class="custom-checkbox_visual">-->
-                        <!--<div class="custom-checkbox_visual_icon"></div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<button class="todos-list_item_remove" aria-label="Delete todo"></button>-->
-                <!--<div class="todos-list_item_text-w">-->
-                    <!--<text class="todos-list_item_text">CSS</text>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="todos-list_item">-->
-                <!--<div class="custom-checkbox todos-list_item_ready-marker">-->
-                    <!--<input type="checkbox" class="custom-checkbox_target" aria-label="Mark todo as ready"/>-->
-                    <!--<div class="custom-checkbox_visual">-->
-                        <!--<div class="custom-checkbox_visual_icon"></div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<button class="todos-list_item_remove" aria-label="Delete todo"></button>-->
-                <!--<div class="todos-list_item_text-w">-->
-                    <!--<text class="todos-list_item_text">JS</text>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="todos-list_item">-->
-                <!--<div class="custom-checkbox todos-list_item_ready-marker">-->
-                    <!--<input type="checkbox" class="custom-checkbox_target" aria-label="Mark todo as ready"/>-->
-                    <!--<div class="custom-checkbox_visual">-->
-                        <!--<div class="custom-checkbox_visual_icon"></div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<button class="todos-list_item_remove" aria-label="Delete todo"></button>-->
-                <!--<div class="todos-list_item_text-w">-->
-                    <!--<text class="todos-list_item_text">JS tools</text>-->
-                <!--</div>-->
-            <!--</div>-->
+            <div class="todos-list-insert"></div>
         </div>
         <div class="todos-toolbar">
             <div class="todos-list_linear"></div>

@@ -29,28 +29,27 @@ public class Service {
     this.dao = dao;
   }
 
-  @RequestMapping(value = "/create", method = RequestMethod.GET)
+  @RequestMapping(value = "/create")
   public @ResponseBody /*Превращает в JSON*/
-  boolean create(@RequestParam String description, @RequestParam boolean checked) {
-    return dao.create(description, checked);
+  ToDo create(@RequestParam String description) {
+    return dao.create(description, false);
   }
 
-  @RequestMapping(value = "/read", method = RequestMethod.GET)
+  @RequestMapping(value = "/read")
   public @ResponseBody /*Превращает в JSON*/
-  List<ToDo> read(){
+  List<ToDo> read() {
     return dao.read();
   }
 
-  @RequestMapping(value = "/update", method = RequestMethod.GET)
+  @RequestMapping(value = "/update")
   public @ResponseBody /*Превращает в JSON*/
-  boolean update(@RequestParam long id, @RequestParam String description, @RequestParam boolean checked){
+  boolean update(@RequestParam long id, @RequestParam String description, @RequestParam boolean checked) {
     return dao.update(id, description, checked);
   }
 
-  @RequestMapping(value = "/delete", method = RequestMethod.GET)
+  @RequestMapping(value = "/delete")
   public @ResponseBody /*Превращает в JSON*/
-  boolean delete(@RequestParam long id){
+  boolean delete(@RequestParam long id) {
     return dao.delete(id);
   }
-
 }

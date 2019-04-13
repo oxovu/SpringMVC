@@ -21,11 +21,11 @@ public class ToDoDAO {
     create("delete matlab", false);
   }
 
-  public boolean create(String description, boolean checked) {
+  public ToDo create(String description, boolean checked) {
     long id = counter.incrementAndGet();
     ToDo todo = new ToDo(id, description, checked);
     toDos.add(todo);
-    return true;
+    return todo;
   }
 
   public List<ToDo> read() {
@@ -36,6 +36,7 @@ public class ToDoDAO {
 
   public boolean update(long id, String description, boolean checked) {
     Iterator<ToDo> iterator = toDos.iterator();
+    if (description == null) description = toDos.get((int) id).getDescription();
     ToDo newTodo = new ToDo(id, description, checked);
     while (iterator.hasNext()) {
       if (iterator.next().getId() == id) {
