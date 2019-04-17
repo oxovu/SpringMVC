@@ -12,7 +12,8 @@ function post(method, path, body, callback) {
 }
 
 function deleteToDo(id) {
-    var form = new FormData().append("id", id);
+    var form = new FormData();
+    form.append("id", id);
     post('DELETE', "/delete", form, empty);
     var todo = document.getElementById(id);
     if (!todo.classList.contains("__done")) {
@@ -81,10 +82,12 @@ function deleteToDoEvent(mouseEvent) {
      deleteToDo(id);
 }
 
-function empty() {}
+function empty() {
+    return;
+}
 
 function checkItemEvent(mouseEvent) {
-     var itemToCheck = mouseEvent.target.parentElement;
+     var itemToCheck = mouseEvent.target.parentElement.parentElement;
      checkItem(itemToCheck);
 }
 
@@ -101,7 +104,7 @@ function checkItem(item) {
        itemLeft(1);
     }
     form.append("id", item.getAttribute('id'));
-    form.append("description", null);
+    form.append("description", item.getElementsByClassName("todos-list_item_text")[0].innerHTML);
     form.append("checked", checked);
     item.getElementsByClassName("custom-checkbox_target")[0].checked = checked;
     post('PUT', "/update", form, empty);
