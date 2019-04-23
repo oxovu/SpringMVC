@@ -1,7 +1,9 @@
 var xhr = new XMLHttpRequest();
 
 function post(method, path, body, callback) {
-    if (!xhr) { return; }
+    if (!xhr) {
+        return;
+    }
     xhr.open(method, path, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
@@ -23,10 +25,19 @@ function deleteToDo(id) {
 }
 
 function createToDo() {
-    var description = document.querySelector('.todos-creator_text-input').value;
-    if (description.trim() === "") { return; }
+    var description = document.querySelector('.todos-creator_text-input');
+    if (description.value.trim() === "") {
+        description.setAttribute('style', 'border: 1px solid red');
+        description.setAttribute('placeholder', 'Fill me');
+        description.value = "";
+        return
+    } else {
+        description.setAttribute('style', 'border: none');
+        description.setAttribute('placeholder', 'What needs to be done?');
+    }
     var form = new FormData();
-    form.append("description", description);
+    form.append("description", description.value);
+    description.value = "";
     itemLeft(1);
     post('POST', "/create", form, createItem);
 }
@@ -39,7 +50,7 @@ function createItem(xhr) {
     var item = document.createElement('div');
     item.classList.add("todos-list_item");
     item.setAttribute('id', id);
-    item.appendChild(new function() {
+    item.appendChild(new function () {
         var checkBox = document.createElement('div');
         checkBox.classList.add("custom-checkbox");
         checkBox.classList.add("todos-list_item_ready-marker");
@@ -78,30 +89,29 @@ function createItem(xhr) {
 }
 
 function deleteToDoEvent(mouseEvent) {
-     var id = mouseEvent.target.parentElement.id;
-     deleteToDo(id);
+    var id = mouseEvent.target.parentElement.id;
+    deleteToDo(id);
 }
 
 function empty() {
-    return;
 }
 
 function checkItemEvent(mouseEvent) {
-     var itemToCheck = mouseEvent.target.parentElement.parentElement;
-     checkItem(itemToCheck);
+    var itemToCheck = mouseEvent.target.parentElement.parentElement;
+    checkItem(itemToCheck);
 }
 
 function checkItem(item) {
     var checked = false;
     var form = new FormData();
     if (!item.classList.contains("__done")) {
-       item.classList.add("__done");
-       checked = true;
-       itemLeft(-1);
+        item.classList.add("__done");
+        checked = true;
+        itemLeft(-1);
     } else {
-       item.classList.remove("__done");
-       checked = false;
-       itemLeft(1);
+        item.classList.remove("__done");
+        checked = false;
+        itemLeft(1);
     }
     form.append("id", item.getAttribute('id'));
     form.append("description", item.getElementsByClassName("todos-list_item_text")[0].innerHTML);
