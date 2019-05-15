@@ -52,4 +52,9 @@ public class Service {
   boolean delete(@RequestParam long id) {
     return dao.delete(id);
   }
+
+  @RequestMapping("/login")
+  public String login() {
+    return "login";
+  }
 }

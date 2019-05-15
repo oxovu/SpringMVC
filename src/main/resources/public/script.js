@@ -10,6 +10,9 @@ function post(method, path, body, callback) {
             callback(xhr);
         }
     };
+    var token = document.querySelector("meta[name='_csrf']").getAttribute('content');
+    var header = document.querySelector("meta[name='_csrf_header']").getAttribute('content');
+    xhr.setRequestHeader(header, token);
     xhr.send(body);
 }
 
