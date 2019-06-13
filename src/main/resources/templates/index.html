@@ -42,18 +42,13 @@
         </div>
         <div class="todos-toolbar">
             <div class="todos-list_linear"></div>
-            <div class="todos-toolbar_unready-counter" th:text="${counter} + ' items left'">no items left</div>
-
             <div class="filters todos-toolbar_filters">
-                <button class="filters-item __selected" aria-label="Filter: All, is selected">All</button>
-                <button class="filters-item" aria-label="Filter: Active">Active</button>
-                <button class="filters-item" aria-label="Filter: Completed">Completed</button>
+                <button class="filters-item __selected" aria-label="Filter: All, is selected" onclick="allFilter()">All</button>
+                <button class="filters-item" aria-label="Filter: Active" onclick="activeFilter()">Active</button>
+                <button class="filters-item" aria-label="Filter: Completed" onclick="completedFilter()">Completed</button>
             </div>
-
-            <button class="todos-toolbar_clear-completed">Clear completed</button>
-
+            <button class="todos-toolbar_clear-completed" onclick="clearCompleted()">Clear completed</button>
         </div>
-
     </div>
 </div>
 

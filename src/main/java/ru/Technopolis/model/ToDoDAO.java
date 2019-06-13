@@ -1,69 +1,68 @@
 package ru.Technopolis.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import ru.Technopolis.model.entities.ToDo;
+import ru.Technopolis.model.repos.TodoRepository;
+import ru.Technopolis.model.repos.TodoUserRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
-import static ru.Technopolis.model.FlexibleComparator.Mode.onlyId;
-
-@Component /*Кладем в контейнер */
+@Component
 public class ToDoDAO {
-  private static AtomicLong counter = new AtomicLong();
-  private static List<ToDo> toDos = new ArrayList<>();
-  private FlexibleComparator comparator = new FlexibleComparator();
 
-  public ToDo create(String description, boolean checked) {
-    long id = counter.incrementAndGet();
-    ToDo todo = new ToDo(id, description, checked);
-    toDos.add(todo);
-    return todo;
-  }
+    @Autowired
+    private TodoRepository todoRepository;
+    @Autowired
+    private TodoUserRepository todoUserRepository;
+    List<ToDo> toDos;
 
-  public List<ToDo> read() {
-    comparator.setSortBy(onlyId);
-    toDos.sort(comparator);
-    return toDos;
-  }
-
-  public boolean update(long id, String description, boolean checked) {
-    Iterator<ToDo> iterator = toDos.iterator();
-    if (description == null) description = toDos.get((int) id).getDescription();
-    ToDo newTodo = new ToDo(id, description, checked);
-    while (iterator.hasNext()) {
-      if (iterator.next().getId() == id) {
-        iterator.remove();
-        toDos.add(newTodo);
-        return true;
-      }
+    public ToDo create(String description, boolean checked) {
+        ToDo todo = new ToDo(description, checked);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+        todo.addUser(
+                todoUserRepository.findTodoUserByName(userDetails.getUsername()));
+        todoRepository.saveAndFlush(todo);
+        readToDos();
+        return todo;
     }
-    return false;
-  }
 
-  public boolean delete(long id) {
-    Iterator<ToDo> iterator = toDos.iterator();
-    while (iterator.hasNext()) {
-      if (iterator.next().getId() == id) {
-        iterator.remove();
-        return true;
-      }
+    public void update(long id, boolean checked) {
+        ToDo todo = todoRepository
+                .findById(id)
+                .orElseThrow(NullPointerException::new);
+        todo.setChecked(checked);
+        todoRepository.save(todo);
+        readToDos();
     }
-    return false;
-  }
 
-  public int leftIteams() {
-    int count = toDos.size();
-    Iterator<ToDo> iterator = toDos.iterator();
-    while (iterator.hasNext()) {
-      if (iterator.next().isChecked()) {
-        count--;
-      }
+    public void delete(long id) {
+        todoRepository.deleteById(id);
+        readToDos();
     }
-    return count;
-  }
+
+    public int leftIteams() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+        return todoRepository.findAllByTodoUsersAndCheckedIsTrue(
+                todoUserRepository.findTodoUserByName(userDetails.getUsername())
+        ).size();
+    }
+
+    public List<ToDo> getToDos() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+        return toDos = todoRepository.findAllByTodoUsers(
+                todoUserRepository.findTodoUserByName(userDetails.getUsername())
+        );
+    }
+
+    public void readToDos() {
+        toDos = getToDos();
+    }
 }
 
 

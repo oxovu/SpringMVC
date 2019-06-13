@@ -7,7 +7,6 @@
 
 .todos-board:before,
 .todos-board:after {
-    /*content: '';*/
     position: absolute;
     top: 100%;
     background: #fff;

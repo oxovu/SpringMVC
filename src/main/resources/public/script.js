@@ -22,7 +22,6 @@ function deleteToDo(id) {
     post('DELETE', "/delete", form, empty);
     var todo = document.getElementById(id);
     if (!todo.classList.contains("__done")) {
-        itemLeft(-1);
     }
     todo.parentElement.removeChild(todo);
 }
@@ -41,12 +40,11 @@ function createToDo() {
     var form = new FormData();
     form.append("description", description.value);
     description.value = "";
-    itemLeft(1);
     post('POST', "/create", form, createItem);
 }
 
 function createItem(xhr) {
-    var responseData = eval("(" + xhr.responseText + ")");
+    var responseData = JSON.parse(xhr.responseText);
     var description = responseData.description;
     var id = responseData.id;
 
@@ -110,11 +108,9 @@ function checkItem(item) {
     if (!item.classList.contains("__done")) {
         item.classList.add("__done");
         checked = true;
-        itemLeft(-1);
     } else {
         item.classList.remove("__done");
         checked = false;
-        itemLeft(1);
     }
     form.append("id", item.getAttribute('id'));
     form.append("description", item.getElementsByClassName("todos-list_item_text")[0].innerHTML);
@@ -123,11 +119,19 @@ function checkItem(item) {
     post('PUT', "/update", form, empty);
 }
 
-var newCount = document.getElementsByClassName('todos-list_item').length - document.getElementsByClassName('__done').length;
+function allFilter() {
+    //todo
+}
 
-function itemLeft(count) {
-    var counter = document.querySelector('.todos-toolbar_unready-counter');
-    newCount += count;
-    counter.innerHTML = newCount + ' items left';
+function activeFilter() {
+    //todo
+}
+
+function completedFilter() {
+    //todo
+}
+
+function clearCompleted() {
+    //todo
 }
 

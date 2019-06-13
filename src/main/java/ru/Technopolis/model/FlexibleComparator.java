@@ -1,5 +1,7 @@
 package ru.Technopolis.model;
 
+import ru.Technopolis.model.entities.ToDo;
+
 import java.util.Comparator;
 
 import static ru.Technopolis.model.FlexibleComparator.Mode.full;
