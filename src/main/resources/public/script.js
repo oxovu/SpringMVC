@@ -120,18 +120,32 @@ function checkItem(item) {
 }
 
 function allFilter() {
-    //todo
+    for (var i = 0; i < document.getElementsByClassName('todos-list_item').length; i++) {
+        document.getElementsByClassName('todos-list_item')[i].classList.remove('__hide');
+    }
 }
 
 function activeFilter() {
-    //todo
+    for (var i = 0; i < document.getElementsByClassName('todos-list_item').length; i++) {
+        var item = document.getElementsByClassName('todos-list_item')[i];
+        var status = item.querySelector('.custom-checkbox_target').checked;
+        if (status) {
+            item.classList.add('__hide');
+        } else {
+            item.classList.remove('__hide');
+        }
+    }
 }
 
 function completedFilter() {
-    //todo
-}
-
-function clearCompleted() {
-    //todo
+    for (var i = 0; i < document.getElementsByClassName('todos-list_item').length; i++) {
+        var item = document.getElementsByClassName('todos-list_item')[i];
+        var status = item.querySelector('.custom-checkbox_target').checked;
+        if (!status) {
+            item.classList.add('__hide');
+        } else {
+            item.classList.remove('__hide');
+        }
+    }
 }
 
